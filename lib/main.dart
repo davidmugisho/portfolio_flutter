@@ -54,40 +54,58 @@ class _FirstScreenState extends State<FirstScreen>
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: const Color.fromARGB(255, 102, 103, 104),
       body: SafeArea(
         child: Stack(
           children: [
-            // Animated background image with border radius
-            Center(
+            // Animated image with border radius, white background, full width, a bit down from top
+            Positioned(
+              bottom: 10,
               child: ScaleTransition(
                 scale: _animation,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(40),
-                  child: Image.asset(
-                    'images/david.png',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
+                child: Container(
+                  height: size.height * 0.60, // Increase this value as needed
+                  width: size.width * 0.999, // Increase this value as needed
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(40),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 16,
+                        offset: Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(40),
+                    child: Image.asset(
+                      'images/david.png',
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                    ),
                   ),
                 ),
               ),
             ),
-            // Overlay content
-            Column(
-              children: [
-                const SizedBox(height: 32),
-                // Top text
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'FULL‑STACK     DEVELOPER',
+            // Top title
+            Positioned(
+              top: 24,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'FULL-STACK',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 26,
+                        color: Colors.black,
+                        fontSize: 35,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 2,
                         shadows: [
@@ -99,69 +117,95 @@ class _FirstScreenState extends State<FirstScreen>
                         ],
                       ),
                     ),
-                  ),
+                    SizedBox(height: 4),
+                    Text(
+                      'developer',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        letterSpacing: 1.2,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 6,
+                            color: Colors.black38,
+                            offset: Offset(1, 1),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                const Spacer(),
-                // Bottom content
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'I’m David Mugisho Bisimwa a Full‑Stack Developer & Designer turning ideas into intuitive web and mobile apps.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          shadows: [
-                            Shadow(
-                              blurRadius: 8,
-                              color: Colors.black38,
-                              offset: Offset(1, 1),
-                            ),
-                          ],
+              ),
+            ),
+            // Bottom content
+            Positioned(
+              left: 24,
+              right: 24,
+              bottom: 40,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'I’m David Mugisho Bisimwa a Full‑Stack Developer & Designer turning ideas into intuitive web and mobile apps.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      shadows: [
+                        Shadow(
+                          blurRadius: 8,
+                          color: Colors.black38,
+                          offset: Offset(1, 1),
                         ),
-                      ),
-                      const SizedBox(height: 18),
-                      Text(
-                        'Explore My Work',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.2,
-                        ),
-                      ),
-                      const SizedBox(height: 18),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 32,
-                            vertical: 14,
-                          ),
-                        ),
-                        onPressed: () {
-                          // TODO: Implement navigation or action
-                        },
-                        child: const Text(
-                          'See',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 36),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 14),
+                  Text(
+                    'Explore My Work',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 102, 103, 104),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(13),
+                        side: const BorderSide(
+                          color: Color.fromARGB(255, 38, 63, 83), // Blue border
+                          width: 1, // Border thickness
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 4,
+                      ),
+                    ),
+                    onPressed: () {
+                      // TODO: Implement navigation or action
+                    },
+                    child: const Text(
+                      'See',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
             ),
           ],
         ),
