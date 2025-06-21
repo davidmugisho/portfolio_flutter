@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'work_screen.dart';
 
 void main() {
   runApp(const PortfolioApp());
@@ -13,7 +14,7 @@ class PortfolioApp extends StatelessWidget {
       title: 'Portfolio',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.blueGrey,
+        scaffoldBackgroundColor: const Color.fromARGB(255, 17, 19, 20),
       ),
       home: const FirstScreen(),
       debugShowCheckedModeBanner: false,
@@ -66,8 +67,8 @@ class _FirstScreenState extends State<FirstScreen>
               child: ScaleTransition(
                 scale: _animation,
                 child: Container(
-                  height: size.height * 0.60, // Increase this value as needed
-                  width: size.width * 0.999, // Increase this value as needed
+                  height: size.height * 0.60,
+                  width: size.width * 0.999,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(40),
@@ -145,7 +146,6 @@ class _FirstScreenState extends State<FirstScreen>
               right: 24,
               bottom: 40,
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     'I’m David Mugisho Bisimwa a Full‑Stack Developer & Designer turning ideas into intuitive web and mobile apps.',
@@ -181,8 +181,8 @@ class _FirstScreenState extends State<FirstScreen>
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(13),
                         side: const BorderSide(
-                          color: Color.fromARGB(255, 38, 63, 83), // Blue border
-                          width: 1, // Border thickness
+                          color: Color.fromARGB(255, 38, 63, 83),
+                          width: 1,
                         ),
                       ),
                       padding: const EdgeInsets.symmetric(
@@ -191,7 +191,12 @@ class _FirstScreenState extends State<FirstScreen>
                       ),
                     ),
                     onPressed: () {
-                      // TODO: Implement navigation or action
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const WorkScreen(),
+                        ),
+                      );
                     },
                     child: const Text(
                       'See',
