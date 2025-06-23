@@ -1,37 +1,31 @@
 import 'package:flutter/material.dart';
 
-class WorkScreen extends StatefulWidget {
+class WorkScreen extends StatelessWidget {
   const WorkScreen({super.key});
 
   @override
-  State<WorkScreen> createState() => _WorkScreenState();
-}
-
-class _WorkScreenState extends State<WorkScreen> {
-  final List<String> images = [
-    'images/girlSchool.jpeg',
-    'images/girl.jpeg',
-    'images/pichild.jpeg',
-  ];
-  int currentIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    // Auto-play carousel
-    Future.delayed(const Duration(milliseconds: 2000), _nextImage);
-  }
-
-  void _nextImage() {
-    if (!mounted) return;
-    setState(() {
-      currentIndex = (currentIndex + 1) % images.length;
-    });
-    Future.delayed(const Duration(milliseconds: 2000), _nextImage);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final projects = [
+      {
+        'mainImage': 'images/girlSchool.jpeg',
+        'sideImage': 'images/girl.jpeg',
+        'name': 'School Project',
+        'year': '2022',
+      },
+      {
+        'mainImage': 'images/girl.jpeg',
+        'sideImage': 'images/pichild.jpeg',
+        'name': 'Girl Project',
+        'year': '2023',
+      },
+      {
+        'mainImage': 'images/pichild.jpeg',
+        'sideImage': 'images/girlSchool.jpeg',
+        'name': 'Child Project',
+        'year': '2024',
+      },
+    ];
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 245, 245, 245),
       body: SafeArea(
@@ -49,7 +43,6 @@ class _WorkScreenState extends State<WorkScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // Handle About me click
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('About me clicked!')),
                       );
@@ -82,113 +75,156 @@ class _WorkScreenState extends State<WorkScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-              // Main image carousel in square with border radius
-              Container(
-                width: 220,
-                height: 220,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(28),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 12,
-                      offset: const Offset(0, 6),
-                    ),
-                  ],
+              // Projects List
+              Expanded(
+                child: ListView.separated(
+                  itemCount: projects.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 32),
+                  itemBuilder: (context, index) {
+                    final project = projects[index];
+                    return ProjectCard(
+                      mainImage: project['mainImage']!,
+                      sideImage: project['sideImage']!,
+                      name: project['name']!,
+                      year: project['year']!,
+                    );
+                  },
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(28),
-                  child: Image.asset(images[currentIndex], fit: BoxFit.cover),
-                ),
-              ),
-              const SizedBox(height: 32),
-              // Row: Animated small image (left), project info (right)
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Animated small image
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 500),
-                    child: Container(
-                      key: ValueKey(currentIndex),
-                      margin: const EdgeInsets.only(
-                        left: 20,
-                        top: 325 - 220,
-                      ), // Y:325, adjust for previous widgets
-                      width: 69,
-                      height: 107,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(18),
-                        child: Image.asset(
-                          images[(currentIndex + 1) % images.length],
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 24),
-                  // Project info and actions
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Project Name',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        const Text(
-                          '2024',
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                        const SizedBox(height: 18),
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.remove),
-                              onPressed: () {},
-                            ),
-                            const Text('Like', style: TextStyle(fontSize: 16)),
-                            IconButton(
-                              icon: const Icon(Icons.add),
-                              onPressed: () {},
-                            ),
-                            const Spacer(),
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              child: const Text('View More'),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class ProjectCard extends StatefulWidget {
+  final String mainImage;
+  final String sideImage;
+  final String name;
+  final String year;
+
+  const ProjectCard({
+    super.key,
+    required this.mainImage,
+    required this.sideImage,
+    required this.name,
+    required this.year,
+  });
+
+  @override
+  State<ProjectCard> createState() => _ProjectCardState();
+}
+
+class _ProjectCardState extends State<ProjectCard> {
+  int likeCount = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // Main image carousel in square with border radius
+        Container(
+          width: 220,
+          height: 220,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(28),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 12,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(28),
+            child: Image.asset(widget.mainImage, fit: BoxFit.cover),
+          ),
+        ),
+        const SizedBox(height: 24),
+        // Row: Animated small image (left), project info (right)
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Small side image
+            Container(
+              width: 69,
+              height: 107,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: Image.asset(widget.sideImage, fit: BoxFit.cover),
+              ),
+            ),
+            const SizedBox(width: 24),
+            // Project info and actions
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.name,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    widget.year,
+                    style: const TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 18),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.remove),
+                        onPressed: () {
+                          setState(() {
+                            if (likeCount > 0) likeCount--;
+                          });
+                        },
+                      ),
+                      Text('$likeCount', style: const TextStyle(fontSize: 16)),
+                      IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          setState(() {
+                            likeCount++;
+                          });
+                        },
+                      ),
+                      const Spacer(),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Text('View More'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
